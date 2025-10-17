@@ -1,0 +1,63 @@
+{% load static %}
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>스쿨클리너 메인 페이지</title>
+
+  <!-- 외부 폰트 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- 분리된 CSS -->
+  <link rel="stylesheet" href="{% static 'css/recycle/main_page.css' %}">
+</head>
+
+
+<body>
+  <!-- 상단 헤더 -->
+  <header>
+    <img class="header__logo" src="{% static 'img/logo/main_logo.png' %}" alt="Andong Girls High School Logo">
+    <h1 class="header__title">스쿨클리너</h1>
+  </header>
+
+  <!-- 안내 문구 -->
+  <div class="main-box">
+    <p>카메라로 물건을 비추면 재활용 방법을 알려드립니다.</p>
+    <button id="btnCam" class="btn">카메라 켜기</button>
+  </div>
+
+  <!-- 카메라 + 가이드 구역 -->
+  <div class="camera-section">
+    <!-- 왼쪽: 카메라 영역 -->
+    <div class="cam-wrap">
+      <div id="webcam-container"></div>
+      <div id="camera-placeholder"></div>
+    </div>
+
+    <!-- 오른쪽: 인식 결과 + 안내 -->
+    <div class="info-box">
+      <div id="result">대상을 비춰주세요</div>
+      <div id="guide">
+        <p>카메라 오른쪽에 분리배출 안내가 표시됩니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 하단 -->
+  <footer>
+    © 2025 안동여자고등학교 | SchoolCleaner Project
+  </footer>
+
+  <!-- TF.js + Teachable Machine -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"
+    onerror="var s=document.createElement('script');s.src='https://unpkg.com/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js';document.head.appendChild(s);">
+  </script>
+  <script>window.TM_MODEL_BASE = "{% static 'model/' %}";</script>
+  <script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>
