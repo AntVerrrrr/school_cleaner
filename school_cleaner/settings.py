@@ -29,6 +29,14 @@ ALLOWED_HOSTS = [
     "*"
 ]
 
+# HTTPS 역프록시에서 스킴 인식
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# CSRF 허용 도메인 (Django 4+)
+CSRF_TRUSTED_ORIGINS = [
+    "https://64.176.228.68.sslip.io",
+]
+
 
 # Application definition
 
