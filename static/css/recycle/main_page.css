@@ -1,69 +1,179 @@
-:root{
-  --bg:#f9fafb; --text:#222; --accent:#0d9488; --primary:#4CAF50;
-  --radius:16px; --shadow:0 4px 20px rgba(0,0,0,.08);
-  --maxw:1080px; /* PC */
-  --maxw-md:900px; /* 태블릿 */
-  --maxw-sm:640px; /* 모바일 큰 화면 */
+/* =========================기본 리셋 & 폰트========================= */
+* {
+  box-sizing: border-box;
 }
 
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-  background:var(--bg); color:var(--text);
-  min-height:100dvh; display:flex; flex-direction:column; align-items:center;
-  padding:24px 16px; font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans KR",sans-serif;
+body {
+  margin: 0;
+  font-family: 'Nanum Gothic', sans-serif;
+  background: #f6f7f9;
+  color: #222;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-/* 헤더 */
-header{ width:100%; max-width:var(--maxw); display:flex; align-items:center; gap:12px; margin:8px 0 16px }
-.header__logo{ height:44px }
-.header__title{ font-size:22px; font-weight:700; color:var(--accent); letter-spacing:-.3px }
-
-/* 상단 안내 카드 */
-.main-box{
-  width:100%; max-width:var(--maxw);
-  background:#fff; border-radius:var(--radius); box-shadow:var(--shadow);
-  padding:16px; text-align:center; margin-bottom:16px;
-}
-.main-box p{ color:#555; margin-bottom:10px }
-.btn{
-  background:var(--accent); color:#fff; border:none; border-radius:12px;
-  padding:12px 20px; font-size:16px; cursor:pointer; transition:background .2s, transform .02s;
-}
-.btn:hover{ background:#0f766e } .btn:active{ transform:scale(.985) }
-
-/* 카메라 + 안내 섹션: 2열 → 좁아지면 1열 */
-.camera-section{
-  width:100%; max-width:var(--maxw);
-  display:grid; grid-template-columns: 1.25fr 1fr; gap:20px; align-items:start;
-  margin:20px auto;
-}
-@media (max-width:1024px){ .camera-section{ max-width:var(--maxw-md) } }
-@media (max-width:768px){ .camera-section{ grid-template-columns:1fr; max-width:var(--maxw-sm) } }
-
-/* 카메라 래퍼: 비율은 JS가 실제 영상에 맞춰 넣어줌 (fallback 4:3) */
-.cam-wrap{
-  position:relative; border-radius:var(--radius); overflow:hidden; background:#000;
-  aspect-ratio:4 / 3; /* 초기/OFF 기본값, ON에서 JS가 실제 비율로 바꿈 */
-  box-shadow:var(--shadow);
+/* =========================헤더========================= */
+header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
 }
 
-/* OFF/ON 모두 같은 영역을 덮도록 절대 배치 */
-#camera-placeholder,#camera-video{
-  position:absolute; inset:0; width:100%; height:100%; display:block;
-  background:#000; border-radius:var(--radius);
+.header__logo {
+  height: 40px;
 }
 
-/* 비디오 표시 방식: 기본은 'contain'(잘림 없음). data-fit="cover"면 꽉 채움(약간 크롭) */
-#camera-video{ object-fit:contain; object-position:center }
-#camera-video[data-fit="cover"]{ object-fit:cover; object-position:center 35% }
+.header__title {
+  font-size: 20px;
+  font-weight: 700;
+}
 
-/* 오른쪽 정보 카드 */
-.info-box{ display:flex; flex-direction:column; gap:12px }
-#result{ font-size:20px; font-weight:800; color:var(--primary) }
-#guide{ background:#f1f5f9; border-radius:12px; padding:12px; line-height:1.6; color:#333 }
+/* =========================상단 안내 영역========================= */
+.main-box {
+  padding: 20px;
+  text-align: center;
+}
 
-/* 푸터 */
-footer{ margin-top:auto; color:#9aa; font-size:13px; padding:16px }
+.main-box p {
+  margin: 0 0 12px;
+  font-size: 16px;
+}
 
-/* 버튼이 좁은 화면에서 전체폭 */
-@media (max-width:480px){ .btn{ width:100% } }
+/* 버튼 그룹 */
+.btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.btn {
+  padding: 10px 18px;
+  font-size: 15px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background: #2563eb;
+  color: #fff;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn:hover {
+  background: #1e40af;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-sub {
+  background: #6b7280;
+}
+
+.btn-sub:hover {
+  background: #4b5563;
+}
+
+/* =========================카메라 + 정보 영역========================= */
+.camera-section {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  flex: 1;
+}
+
+/* =========================카메라 박스 (핵심)========================= */
+.cam-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  aspect-ratio: 4 / 3;
+  background: #000;
+  border-radius: 16px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* 비디오가 박스를 꽉 채우도록 */
+.cam-wrap video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* contain으로 바꾸면 잘림 없음 */
+  display: block;
+}
+
+/* webcam-container는 레이아웃만 담당 */
+#webcam-container {
+  position: absolute;
+  inset: 0;
+}
+
+/* =========================카메라 placeholder========================= */
+#camera-placeholder {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  font-size: 14px;
+  border-radius: 16px;
+}
+
+/* =========================오른쪽 정보 박스========================= */
+.info-box {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+#result {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+#guide {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #374151;
+}
+
+/* =========================푸터========================= */
+footer {
+  text-align: center;
+  padding: 12px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* =========================반응형 (태블릿/모바일)========================= */
+@media (max-width: 900px) {
+  .camera-section {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .info-box {
+    width: 100%;
+  }
+
+  .cam-wrap {
+    width: 100%;
+  }
+}
